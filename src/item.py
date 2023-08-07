@@ -1,4 +1,6 @@
 import csv
+import os
+
 
 class Item:
     """
@@ -15,33 +17,35 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
         Item.all.append(self)
 
-
     @property
     def name(self):
-        return self.name
-
+        return self.__name
 
     @name.setter
     def name(self, name):
-        if len(name) > 10:
-            self.__name = name[:10]
-            return self.__name
-        self.__name = name
-        return self.__name
-
+        if len(name) <= 10:
+            self.__name = name
+        else:
+            return print("Длина превышает 10 символов")
 
     @classmethod
-    def instantiate_from_csv(cls):
-        with open('item.csv', newline='') as csvfile:
+    def instantiate_from_csv(cls, filename='items.csv'):
+        Item.all.clear()
+        file = os.path.join(os.path.dirname(__file__), filename)
+        with open(file, newline='', encoding='windows-1251') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                print(row['first_name'], row['last_name'])
+                cls(row['name'], row['price'], row['quantity'])
 
+    @staticmethod
+    def string_to_number(str_num):
+        str_num = float(str_num)
+        return int(str_num)
 
     def calculate_total_price(self) -> float:
         """
@@ -50,7 +54,7 @@ class Item:
         :return: Общая стоимость товара.
         """
         total_price = self.price * self.quantity
-        
+
         return total_price
 
     def apply_discount(self) -> None:
@@ -58,4 +62,3 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= self.pay_rate
-
