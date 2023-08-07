@@ -1,3 +1,5 @@
+import csv
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -16,6 +18,30 @@ class Item:
         self.name = name
         self.price = price
         self.quantity = quantity
+        Item.all.append(self)
+
+
+    @property
+    def name(self):
+        return self.name
+
+
+    @name.setter
+    def name(self, name):
+        if len(name) > 10:
+            self.__name = name[:10]
+            return self.__name
+        self.__name = name
+        return self.__name
+
+
+    @classmethod
+    def instantiate_from_csv(cls):
+        with open('item.csv', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                print(row['first_name'], row['last_name'])
+
 
     def calculate_total_price(self) -> float:
         """
