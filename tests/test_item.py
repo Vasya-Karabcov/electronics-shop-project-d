@@ -32,3 +32,11 @@ def test_name(test_item1):
 ])
 def test_string_to_number(number, extented):
     assert Item.string_to_number(number) == extented
+
+
+def test_repr(test_item1):
+    assert repr(test_item1) == "Item('Смартфон', 10000, 20)"
+
+
+def test_str(test_item1):
+    assert str(test_item1) == 'Смартфон'
