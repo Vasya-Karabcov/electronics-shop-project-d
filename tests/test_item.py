@@ -1,6 +1,6 @@
 import pytest
 
-from src.item import Item
+from src.item import Item, InstantiateCSVError
 
 
 def test_calculate_total_price(test_item1, test_item2):
@@ -16,6 +16,11 @@ def test_apply_discount(test_item1):
 def test_instantiate_from_csv(test_item1):
     test_item1.instantiate_from_csv()
     assert len(test_item1.all) == 5
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv('..\src\item.csv')
+    with pytest.raises(InstantiateCSVError):
+        Item.instantiate_from_csv('..\src\item_err.csv')
+
 
 
 def test_name(test_item1):
@@ -40,3 +45,4 @@ def test_repr(test_item1):
 
 def test_str(test_item1):
     assert str(test_item1) == 'Смартфон'
+
